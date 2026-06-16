@@ -2,11 +2,16 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import { loginTypes } from "../types/authTypes";
+import toast from "react-hot-toast";
+import axios from "axios";
+
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 export function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -17,11 +22,25 @@ export function Login() {
     });
 
     if (!inputs.success) {
-      alert("Invalid Inputs");
+      toast.error("Invalid Inputs");
       return;
     }
+    try {
+      setLoading(true);
+      const response = await axios.post(`${backendUrl}/auth/login`, {
+        email,
+        password,
+      });
+      const token = response.data.token;
 
-    console.log("Login successful");
+      localStorage.setItem("token", token);
+
+      toast.success(response.data.message);
+      setLoading(false);
+      navigate("/dashboard");
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Something went wrong");
+    }
   }
 
   return (
@@ -78,9 +97,10 @@ export function Login() {
 
           <button
             onClick={Login}
+            disabled={loading}
             className="w-full bg-black text-white py-3 rounded-lg font-medium hover:bg-gray-800 transition"
           >
-            Login
+            {loading ? "Loading..." : "Login"}
           </button>
         </div>
         <p className="text-center text-sm text-gray-600 mt-6">

@@ -2,6 +2,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff, User, Mail, Lock } from "lucide-react";
 import { registerTypes } from "../types/authTypes";
+import axios from "axios";
+import toast from "react-hot-toast";
+
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 export function Register() {
   const [username, setUsername] = useState("");
@@ -9,9 +13,11 @@ export function Register() {
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
 
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
-  async function Register() {
+  async function userRegister() {
     const inputs = registerTypes.safeParse({
       username,
       email,
@@ -19,11 +25,28 @@ export function Register() {
     });
 
     if (!inputs.success) {
-      alert("Incorrect inputs");
+      toast.error("Invalid inputs");
       return;
     }
 
-    console.log("Register success");
+    try {
+      setLoading(true);
+      const response = await axios.post(`${backendUrl}/auth/register`, {
+        username,
+        email,
+        password,
+      });
+
+      const token = response.data.token;
+
+      localStorage.setItem("token", token);
+
+      toast.success(response.data.message);
+      setLoading(false);
+      navigate("/dashboard");
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || "Something went wrong");
+    }
   }
 
   return (
@@ -97,10 +120,11 @@ export function Register() {
           </div>
 
           <button
-            onClick={Register}
+            onClick={userRegister}
+            disabled={loading}
             className="w-full bg-black text-white py-3 rounded-lg font-medium hover:bg-gray-800 transition"
           >
-            Register
+            {loading ? "Loading..." : "Register"}
           </button>
         </div>
 
