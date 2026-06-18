@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { backendUrl } from "../backendBaseUrl";
 import toast from "react-hot-toast";
+
 import { Notices } from "../components/Notices";
+import { Files } from "../components/Files";
 
 export function Room() {
   const { roomId } = useParams();
@@ -107,11 +109,7 @@ export function Room() {
 
         {activeTab === "notices" && <Notices roomId={roomId} />}
 
-        {activeTab === "files" && (
-          <div className="bg-white border border-zinc-200 rounded-xl p-6">
-            Files Section
-          </div>
-        )}
+        {activeTab === "files" && <Files roomId={roomId} />}
 
         {activeTab === "members" && (
           <div className="bg-white border border-zinc-200 rounded-xl p-6">
