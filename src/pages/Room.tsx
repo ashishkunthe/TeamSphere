@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { backendUrl } from "../backendBaseUrl";
 import toast from "react-hot-toast";
+import { Notices } from "../components/Notices";
 
 export function Room() {
   const { roomId } = useParams();
@@ -95,20 +96,16 @@ export function Room() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-10">
+      <div className="flex-1 p-10 overflow-y-auto">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold">{roomName}</h1>
+          <h1 className="text-4xl font-bold text-zinc-900">{roomName}</h1>
 
           <p className="text-zinc-500 mt-2">
-            Manage notices, files, and members.
+            Manage notices, files, and team members.
           </p>
         </div>
 
-        {activeTab === "notices" && (
-          <div className="bg-white border border-zinc-200 rounded-xl p-6">
-            Notices Section
-          </div>
-        )}
+        {activeTab === "notices" && <Notices roomId={roomId} />}
 
         {activeTab === "files" && (
           <div className="bg-white border border-zinc-200 rounded-xl p-6">
