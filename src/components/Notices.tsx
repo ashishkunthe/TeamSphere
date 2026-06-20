@@ -29,7 +29,7 @@ export function Notices({ roomId }: { roomId: string }) {
         );
         setNotices(response.data.notices);
         setLoading(false);
-      } catch (error) {
+      } catch (error: any) {
         console.log(error);
         toast.error(error ? error.message : "Something went wrong");
       }

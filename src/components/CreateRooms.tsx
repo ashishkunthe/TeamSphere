@@ -38,7 +38,7 @@ export function CreateRooms({ onClose, onSuccess }: CreateRoomsProps) {
       setDescription("");
       setLoading(false);
       onSuccess();
-    } catch (error) {
+    } catch (error: any) {
       toast.error(error?.response?.data?.message || "Something went wrong");
     }
   }

@@ -40,7 +40,7 @@ export function Members({ roomId }: { roomId: string }) {
     return () => clearTimeout(timer);
   }, [query]);
 
-  async function addMember(memberId) {
+  async function addMember(memberId: any) {
     try {
       const response = await axios.post(
         `${backendUrl}/room/add-member/${roomId}`,
@@ -50,12 +50,12 @@ export function Members({ roomId }: { roomId: string }) {
         }
       );
       toast.success(response.data.message);
-    } catch (error) {
+    } catch (error: any) {
       toast.error(error?.response?.data?.message || "Something went wrong");
     }
   }
 
-  async function removeMember(memberId) {
+  async function removeMember(memberId: any) {
     try {
       const response = await axios.delete(
         `${backendUrl}/room/delete-member/${roomId}`,
@@ -65,7 +65,7 @@ export function Members({ roomId }: { roomId: string }) {
         }
       );
       toast.success(response.data.message);
-    } catch (error) {
+    } catch (error: any) {
       toast.error(error?.response?.data?.message || "Something went wrong");
     }
   }

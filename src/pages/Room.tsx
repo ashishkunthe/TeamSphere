@@ -34,7 +34,7 @@ export function Room() {
         });
 
         setRoomName(response.data.room.name);
-      } catch (error) {
+      } catch (error: any) {
         toast.error(error ? error.message : "Something went wrong");
       }
     }
@@ -110,12 +110,12 @@ export function Room() {
           </p>
         </div>
 
-        {activeTab === "notices" && <Notices roomId={roomId} />}
+        {activeTab === "notices" && <Notices roomId={roomId!} />}
 
-        {activeTab === "files" && <Files roomId={roomId} />}
+        {activeTab === "files" && <Files roomId={roomId!} />}
 
         {activeTab === "members" && type === "my" && (
-          <Members roomId={roomId} />
+          <Members roomId={roomId!} />
         )}
       </div>
     </div>
