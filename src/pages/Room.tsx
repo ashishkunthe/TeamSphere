@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 
 import { Notices } from "../components/Notices";
 import { Files } from "../components/Files";
+import { Members } from "../components/Members";
 
 export function Room() {
   const { roomId } = useParams();
@@ -83,17 +84,19 @@ export function Room() {
             Files
           </button>
 
-          <button
-            onClick={() => setActiveTab("members")}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition ${
-              activeTab === "members"
-                ? "bg-black text-white"
-                : "hover:bg-zinc-100"
-            }`}
-          >
-            <Users size={18} />
-            Members
-          </button>
+          {type === "my" && (
+            <button
+              onClick={() => setActiveTab("members")}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition ${
+                activeTab === "members"
+                  ? "bg-black text-white"
+                  : "hover:bg-zinc-100"
+              }`}
+            >
+              <Users size={18} />
+              Members
+            </button>
+          )}
         </div>
       </div>
 
@@ -111,10 +114,8 @@ export function Room() {
 
         {activeTab === "files" && <Files roomId={roomId} />}
 
-        {activeTab === "members" && (
-          <div className="bg-white border border-zinc-200 rounded-xl p-6">
-            Members Section
-          </div>
+        {activeTab === "members" && type === "my" && (
+          <Members roomId={roomId} />
         )}
       </div>
     </div>
