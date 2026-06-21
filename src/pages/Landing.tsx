@@ -7,10 +7,19 @@ import {
   FolderKanban,
   Rocket,
 } from "lucide-react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export function Landing() {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      navigate("/dashboard");
+    }
+  }, [navigate]);
 
   return (
     <div className="min-h-screen bg-white text-black">

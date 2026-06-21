@@ -8,6 +8,9 @@ export function Members({ roomId }: { roomId: string }) {
   const [query, setQuery] = useState("");
   const [users, setUsers] = useState<any[]>([]);
 
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
+
   useEffect(() => {
     async function searchUsers() {
       if (!query.trim()) {
@@ -16,6 +19,7 @@ export function Members({ roomId }: { roomId: string }) {
       }
 
       try {
+        setSearchLoading(true);
         const response = await axios.get(
           `${backendUrl}/user/search-users?query=${query}`,
           {
@@ -30,6 +34,8 @@ export function Members({ roomId }: { roomId: string }) {
         setUsers(response.data.users);
       } catch (error) {
         console.log("SEARCH ERROR:", error);
+      } finally {
+        setSearchLoading(false);
       }
     }
 
@@ -42,6 +48,7 @@ export function Members({ roomId }: { roomId: string }) {
 
   async function addMember(memberId: any) {
     try {
+      setActionLoading(memberId);
       const response = await axios.post(
         `${backendUrl}/room/add-member/${roomId}`,
         { memberId },
@@ -52,11 +59,14 @@ export function Members({ roomId }: { roomId: string }) {
       toast.success(response.data.message);
     } catch (error: any) {
       toast.error(error?.response?.data?.message || "Something went wrong");
+    } finally {
+      setActionLoading(null);
     }
   }
 
   async function removeMember(memberId: any) {
     try {
+      setActionLoading(memberId);
       const response = await axios.delete(
         `${backendUrl}/room/delete-member/${roomId}`,
         {
@@ -67,6 +77,8 @@ export function Members({ roomId }: { roomId: string }) {
       toast.success(response.data.message);
     } catch (error: any) {
       toast.error(error?.response?.data?.message || "Something went wrong");
+    } finally {
+      setActionLoading(null);
     }
   }
 
@@ -95,6 +107,13 @@ export function Members({ roomId }: { roomId: string }) {
         </div>
       </div>
 
+      {searchLoading && (
+        <div className="mt-4 text-zinc-500 flex items-center gap-2">
+          <div className="w-4 h-4 border-2 border-zinc-300 border-t-black rounded-full animate-spin"></div>
+          Searching users...
+        </div>
+      )}
+
       {query && users.length === 0 && (
         <div className="bg-white border border-zinc-200 rounded-xl p-8 text-center">
           <p className="text-zinc-500">No users found.</p>
@@ -117,18 +136,32 @@ export function Members({ roomId }: { roomId: string }) {
               <div className="flex gap-2">
                 <button
                   onClick={() => addMember(user._id)}
-                  className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-zinc-800 transition"
+                  disabled={actionLoading === user._id}
+                  className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-zinc-800 transition disabled:opacity-50"
                 >
-                  <UserPlus size={16} />
-                  Add
+                  {actionLoading === user._id ? (
+                    <div className="w-4 h-4 border-2 border-zinc-300 border-t-white rounded-full animate-spin" />
+                  ) : (
+                    <>
+                      <UserPlus size={16} />
+                      Add
+                    </>
+                  )}
                 </button>
 
                 <button
                   onClick={() => removeMember(user._id)}
-                  className="flex items-center gap-2 px-4 py-2 border border-zinc-300 rounded-lg hover:bg-zinc-100 transition"
+                  disabled={actionLoading === user._id}
+                  className="flex items-center gap-2 px-4 py-2 border border-zinc-300 rounded-lg hover:bg-zinc-100 transition disabled:opacity-50"
                 >
-                  <UserMinus size={16} />
-                  Remove
+                  {actionLoading === user._id ? (
+                    <div className="w-4 h-4 border-2 border-zinc-300 border-t-black rounded-full animate-spin" />
+                  ) : (
+                    <>
+                      <UserMinus size={16} />
+                      Remove
+                    </>
+                  )}
                 </button>
               </div>
             </div>

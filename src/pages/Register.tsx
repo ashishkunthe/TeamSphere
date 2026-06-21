@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff, User, Mail, Lock } from "lucide-react";
 import { registerTypes } from "../types/authTypes";
@@ -16,6 +16,14 @@ export function Register() {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      navigate("/dashboard");
+    }
+  }, [navigate]);
 
   async function userRegister() {
     const inputs = registerTypes.safeParse({
