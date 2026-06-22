@@ -1,6 +1,6 @@
 import axios from "axios";
 import { X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { backendUrl } from "../backendBaseUrl";
 
@@ -53,6 +53,8 @@ export function UpdateNoticeModule({
       setLoading(false);
     }
   }
+
+  useEffect(() => {}, []);
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">

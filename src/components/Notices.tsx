@@ -15,25 +15,26 @@ export function Notices({ roomId }: { roomId: string }) {
   const [selectedNotice, setSelectedNotice] = useState<any>(null);
   const [isUpdateOpen, setIsUpdateOpen] = useState(false);
 
-  useEffect(() => {
-    async function getNotices() {
-      setLoading(true);
-      try {
-        const response = await axios.get(
-          `${backendUrl}/notice/notices/${roomId}`,
-          {
-            headers: {
-              Authorization: localStorage.getItem("token"),
-            },
-          }
-        );
-        setNotices(response.data.notices);
-        setLoading(false);
-      } catch (error: any) {
-        console.log(error);
-        toast.error(error ? error.message : "Something went wrong");
-      }
+  async function getNotices() {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `${backendUrl}/notice/notices/${roomId}`,
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
+      setNotices(response.data.notices);
+      setLoading(false);
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error ? error.message : "Something went wrong");
     }
+  }
+
+  useEffect(() => {
     getNotices();
   }, []);
 
@@ -81,7 +82,13 @@ export function Notices({ roomId }: { roomId: string }) {
         </button>
       </div>
 
-      {isOpen && <CreateNoticeModule roomId={roomId} setIsOpen={setIsOpen} />}
+      {isOpen && (
+        <CreateNoticeModule
+          roomId={roomId}
+          setIsOpen={setIsOpen}
+          refreshNotices={getNotices}
+        />
+      )}
 
       {isUpdateOpen && selectedNotice && (
         <UpdateNoticeModule

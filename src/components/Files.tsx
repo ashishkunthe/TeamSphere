@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FileText, Loader, Trash2, Upload } from "lucide-react";
+import { FileText, Loader, Trash2, Upload, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { backendUrl } from "../backendBaseUrl";
@@ -49,6 +49,7 @@ export function Files({ roomId }: { roomId: string }) {
       setDeletingFileId(null);
     }
   }
+
   useEffect(() => {
     getFiles();
   }, []);
@@ -71,7 +72,13 @@ export function Files({ roomId }: { roomId: string }) {
         </button>
       </div>
 
-      {isOpen && <FileUpload roomId={roomId} setIsOpen={setIsOpen} />}
+      {isOpen && (
+        <FileUpload
+          roomId={roomId}
+          setIsOpen={setIsOpen}
+          refreshFile={getFiles}
+        />
+      )}
 
       {loading ? (
         <div className="space-y-4">
@@ -112,6 +119,10 @@ export function Files({ roomId }: { roomId: string }) {
                   <h3 className="font-semibold">{file.fileName}</h3>
 
                   <p className="text-sm text-zinc-500">{file.description}</p>
+                  <p className="text-sm text-zinc-500 flex items-center gap-1.5 mt-1">
+                    <User className="w-4 h-4" />
+                    <span>{file.uploadedBy.username}</span>
+                  </p>
                 </div>
               </div>
 

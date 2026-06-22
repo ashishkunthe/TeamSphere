@@ -7,9 +7,11 @@ import { backendUrl } from "../backendBaseUrl";
 export function CreateNoticeModule({
   roomId,
   setIsOpen,
+  refreshNotices,
 }: {
   roomId: string;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  refreshNotices: any;
 }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -41,6 +43,8 @@ export function CreateNoticeModule({
 
       setTitle("");
       setDescription("");
+
+      await refreshNotices();
 
       setIsOpen(false);
     } catch (error: any) {

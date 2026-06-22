@@ -7,9 +7,11 @@ import { backendUrl } from "../backendBaseUrl";
 export function FileUpload({
   roomId,
   setIsOpen,
+  refreshFile,
 }: {
   roomId: string;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  refreshFile: any;
 }) {
   const [file, setFile] = useState<File | null>(null);
   const [description, setDescription] = useState("");
@@ -41,6 +43,8 @@ export function FileUpload({
       );
 
       toast.success(response.data.message);
+
+      await refreshFile();
 
       setIsOpen(false);
     } catch (error: any) {
