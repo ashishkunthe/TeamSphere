@@ -28,9 +28,7 @@ export function Room() {
         type === "my" ? "/room/get-my-rooms" : "/room/joined-rooms";
       try {
         const response = await axios.get(`${backendUrl}${endPoint}/${roomId}`, {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
+          withCredentials: true,
         });
 
         setRoomName(response.data.room.name);

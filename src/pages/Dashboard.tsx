@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../axios/axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { CreateRooms } from "../components/CreateRooms";
@@ -27,15 +27,12 @@ export function Dashboard() {
         const endpoint =
           activeTab === "myRooms" ? "/room/get-my-rooms" : "/room/joined-rooms";
 
-        const response = await axios.get(`${backendUrl}${endpoint}`, {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        });
+        const response = await axios.get(`${backendUrl}${endpoint}`);
 
         setRooms(response.data.rooms);
       } catch (error: any) {
         toast.error(error?.response?.data?.message || "Something went wrong");
+        console.log(error);
       } finally {
         setLoading(false);
       }

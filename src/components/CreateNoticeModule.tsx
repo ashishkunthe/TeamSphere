@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../axios/axios";
 import { X } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -31,11 +31,6 @@ export function CreateNoticeModule({
         {
           title,
           description,
-        },
-        {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
         }
       );
 

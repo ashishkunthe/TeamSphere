@@ -9,16 +9,21 @@ import {
 } from "lucide-react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "../axios/axios";
+import { backendUrl } from "../backendBaseUrl";
 
 export function Landing() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (token) {
-      navigate("/dashboard");
-    }
+    axios
+      .get(`${backendUrl}/auth/me`)
+      .then(() => {
+        navigate("/dashboard");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, [navigate]);
 
   return (

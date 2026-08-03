@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff, User, Mail, Lock } from "lucide-react";
 import { registerTypes } from "../types/authTypes";
-import axios from "axios";
+import axios from "../axios/axios";
 import toast from "react-hot-toast";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -44,10 +44,6 @@ export function Register() {
         email,
         password,
       });
-
-      const token = response.data.token;
-
-      localStorage.setItem("token", token);
 
       toast.success(response.data.message);
       setLoading(false);

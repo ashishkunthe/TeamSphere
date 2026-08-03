@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../axios/axios";
 import { FileText, Loader, Trash2, Upload, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -14,11 +14,10 @@ export function Files({ roomId }: { roomId: string }) {
   async function getFiles() {
     try {
       setLoading(true);
-      const response = await axios.get(`${backendUrl}/file/files/${roomId}`, {
-        headers: {
-          Authorization: localStorage.getItem("token"),
-        },
-      });
+      const response = await axios.get(
+        `${backendUrl}/file/files/${roomId}`,
+        {}
+      );
 
       setLoading(false);
       setFiles(response.data.files);
@@ -32,12 +31,7 @@ export function Files({ roomId }: { roomId: string }) {
       setDeletingFileId(fileId);
 
       const response = await axios.delete(
-        `${backendUrl}/file/delete-file/${roomId}/${fileId}`,
-        {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        }
+        `${backendUrl}/file/delete-file/${roomId}/${fileId}`
       );
 
       toast.success(response.data.message);

@@ -1,7 +1,7 @@
 import { BellPlus, Pencil, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { CreateNoticeModule } from "./CreateNoticeModule";
-import axios from "axios";
+import axios from "../axios/axios";
 import { backendUrl } from "../backendBaseUrl";
 import toast from "react-hot-toast";
 import { UpdateNoticeModule } from "./UpdateNoticeModule";
@@ -19,12 +19,7 @@ export function Notices({ roomId }: { roomId: string }) {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${backendUrl}/notice/notices/${roomId}`,
-        {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        }
+        `${backendUrl}/notice/notices/${roomId}`
       );
       setNotices(response.data.notices);
       setLoading(false);
@@ -41,12 +36,7 @@ export function Notices({ roomId }: { roomId: string }) {
   async function deleteNotice(noticeId: string) {
     try {
       const response = await axios.delete(
-        `${backendUrl}/notice/delete-notice/${noticeId}`,
-        {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        }
+        `${backendUrl}/notice/delete-notice/${noticeId}`
       );
 
       toast.success(response.data.message);

@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../axios/axios";
 import { useEffect, useState } from "react";
 import { backendUrl } from "../backendBaseUrl";
 import toast from "react-hot-toast";
@@ -21,12 +21,7 @@ export function Members({ roomId }: { roomId: string }) {
       try {
         setSearchLoading(true);
         const response = await axios.get(
-          `${backendUrl}/user/search-users?query=${query}`,
-          {
-            headers: {
-              Authorization: localStorage.getItem("token"),
-            },
-          }
+          `${backendUrl}/user/search-users?query=${query}`
         );
 
         console.log("SEARCH RESPONSE:", response.data);
@@ -51,10 +46,7 @@ export function Members({ roomId }: { roomId: string }) {
       setActionLoading(memberId);
       const response = await axios.post(
         `${backendUrl}/room/add-member/${roomId}`,
-        { memberId },
-        {
-          headers: { Authorization: localStorage.getItem("token") },
-        }
+        { memberId }
       );
       toast.success(response.data.message);
     } catch (error: any) {
@@ -70,7 +62,6 @@ export function Members({ roomId }: { roomId: string }) {
       const response = await axios.delete(
         `${backendUrl}/room/delete-member/${roomId}`,
         {
-          headers: { Authorization: localStorage.getItem("token") },
           data: { memberId },
         }
       );

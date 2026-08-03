@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createRoomTypes } from "../types/roomTypes";
 import toast from "react-hot-toast";
-import axios from "axios";
+import axios from "../axios/axios";
 import { backendUrl } from "../backendBaseUrl";
 interface CreateRoomsProps {
   onClose: () => void;
@@ -23,14 +23,10 @@ export function CreateRooms({ onClose, onSuccess }: CreateRoomsProps) {
       }
 
       setLoading(true);
-      const response = await axios.post(
-        `${backendUrl}/room/create-room`,
-        {
-          name,
-          description,
-        },
-        { headers: { Authorization: localStorage.getItem("token") } }
-      );
+      const response = await axios.post(`${backendUrl}/room/create-room`, {
+        name,
+        description,
+      });
 
       toast.success(response.data.message);
 

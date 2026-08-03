@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../axios/axios";
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -34,11 +34,6 @@ export function UpdateNoticeModule({
         {
           title,
           description,
-        },
-        {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
         }
       );
 

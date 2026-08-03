@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import { loginTypes } from "../types/authTypes";
 import toast from "react-hot-toast";
-import axios from "axios";
+import axios from "../axios/axios";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -39,9 +39,6 @@ export function Login() {
         email,
         password,
       });
-      const token = response.data.token;
-
-      localStorage.setItem("token", token);
 
       toast.success(response.data.message);
       setLoading(false);

@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../axios/axios";
 import { X } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -36,7 +36,6 @@ export function FileUpload({
         formData,
         {
           headers: {
-            Authorization: localStorage.getItem("token"),
             "Content-Type": "multipart/form-data",
           },
         }
