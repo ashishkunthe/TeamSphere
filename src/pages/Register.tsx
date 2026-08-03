@@ -18,11 +18,14 @@ export function Register() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (token) {
-      navigate("/dashboard");
-    }
+    axios
+      .get(`${backendUrl}/auth/me`)
+      .then(() => {
+        navigate("/dashboard");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, [navigate]);
 
   async function userRegister() {
