@@ -46,7 +46,7 @@ export function Room() {
     console.log("websocket url", websocketUrl);
 
     console.log("ENV:", import.meta.env);
-    console.log("WS URL:", websocketUrl);
+    console.log("WS URL:", import.meta.env.VITE_WS_URL);
 
     const socket = new WebSocket(`${websocketUrl}?roomId=${roomId}`);
 
