@@ -2,7 +2,7 @@ import axios from "axios";
 import { ArrowLeft, Bell, FileText, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { backendUrl } from "../backendBaseUrl";
+import { backendUrl, websocketUrl } from "../backendBaseUrl";
 import toast from "react-hot-toast";
 
 import { Notices } from "../components/Notices";
@@ -16,6 +16,9 @@ export function Room() {
   const type = searchParams.get("type");
 
   const [roomName, setRoomName] = useState("");
+
+  const [newNotice, setNewNotice] = useState<any>(null);
+  const [newFile, setNewFile] = useState<any>(null);
 
   const [activeTab, setActiveTab] = useState<"notices" | "files" | "members">(
     "notices"
@@ -38,6 +41,44 @@ export function Room() {
     }
     getRoomDetails();
   }, []);
+
+  useEffect(() => {
+    const socket = new WebSocket(`${websocketUrl}?roomId=${roomId}`);
+
+    socket.onopen = () => {
+      console.log("Socket connected");
+    };
+
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+
+      if (data.type === "NEW_NOTICE") {
+        console.log("New notice:", data.notice);
+
+        setNewNotice(data.notice);
+        toast.success(`New notice${data.notice.title}`);
+      }
+
+      if (data.type === "NEW_FILE") {
+        console.log("New File:", data.file);
+
+        setNewFile(data.file);
+        toast.success(`New File ${data.file.fileName}`);
+      }
+    };
+
+    socket.onerror = (error) => {
+      console.log("Socket error", error);
+    };
+
+    socket.onclose = () => {
+      console.log("socket closed");
+    };
+
+    return () => {
+      socket.close();
+    };
+  }, [roomId]);
 
   return (
     <div className="min-h-screen bg-zinc-50 flex">
@@ -108,9 +149,11 @@ export function Room() {
           </p>
         </div>
 
-        {activeTab === "notices" && <Notices roomId={roomId!} />}
+        {activeTab === "notices" && (
+          <Notices roomId={roomId!} newNotice={newNotice} />
+        )}
 
-        {activeTab === "files" && <Files roomId={roomId!} />}
+        {activeTab === "files" && <Files roomId={roomId!} newFile={newFile} />}
 
         {activeTab === "members" && type === "my" && (
           <Members roomId={roomId!} />

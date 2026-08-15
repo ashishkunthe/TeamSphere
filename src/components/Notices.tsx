@@ -6,7 +6,13 @@ import { backendUrl } from "../backendBaseUrl";
 import toast from "react-hot-toast";
 import { UpdateNoticeModule } from "./UpdateNoticeModule";
 
-export function Notices({ roomId }: { roomId: string }) {
+export function Notices({
+  roomId,
+  newNotice,
+}: {
+  roomId: string;
+  newNotice: any;
+}) {
   const [notices, setNotices] = useState<any[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -32,6 +38,20 @@ export function Notices({ roomId }: { roomId: string }) {
   useEffect(() => {
     getNotices();
   }, []);
+
+  useEffect(() => {
+    if (!newNotice) return;
+
+    setNotices((prev) => {
+      const alreadyExists = prev.some((notice) => notice._id === newNotice._id);
+
+      if (alreadyExists) {
+        return prev;
+      }
+
+      return [newNotice, ...prev];
+    });
+  }, [newNotice]);
 
   async function deleteNotice(noticeId: string) {
     try {

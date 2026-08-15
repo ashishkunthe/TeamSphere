@@ -4,8 +4,7 @@ import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import { loginTypes } from "../types/authTypes";
 import toast from "react-hot-toast";
 import axios from "../axios/axios";
-
-const backendUrl = import.meta.env.VITE_BACKEND_URL;
+import { backendUrl } from "../backendBaseUrl";
 
 export function Login() {
   const [email, setEmail] = useState("");
@@ -48,6 +47,7 @@ export function Login() {
       navigate("/dashboard");
     } catch (error: any) {
       toast.error(error?.response?.data?.message || "Something went wrong");
+      setLoading(false);
     }
   }
 

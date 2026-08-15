@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { backendUrl } from "../backendBaseUrl";
 import { FileUpload } from "./FileUpload";
 
-export function Files({ roomId }: { roomId: string }) {
+export function Files({ roomId, newFile }: { roomId: string; newFile: any }) {
   const [files, setFiles] = useState<any[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -47,6 +47,20 @@ export function Files({ roomId }: { roomId: string }) {
   useEffect(() => {
     getFiles();
   }, []);
+
+  useEffect(() => {
+    if (!newFile) return;
+
+    setFiles((prev) => {
+      const alreadyExists = prev.some((notice) => notice._id === newFile._id);
+
+      if (alreadyExists) {
+        return prev;
+      }
+
+      return [newFile, ...prev];
+    });
+  }, [newFile]);
 
   return (
     <div className="space-y-6">
