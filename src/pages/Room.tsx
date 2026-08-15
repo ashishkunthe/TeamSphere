@@ -44,6 +44,10 @@ export function Room() {
 
   useEffect(() => {
     console.log("websocket url", websocketUrl);
+
+    console.log("ENV:", import.meta.env);
+    console.log("WS URL:", websocketUrl);
+
     const socket = new WebSocket(`${websocketUrl}?roomId=${roomId}`);
 
     socket.onopen = () => {
