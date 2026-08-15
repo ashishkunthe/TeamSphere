@@ -42,9 +42,8 @@ export function Room() {
     getRoomDetails();
   }, []);
 
-  console.log(websocketUrl);
-
   useEffect(() => {
+    console.log("websocket url", websocketUrl);
     const socket = new WebSocket(`${websocketUrl}?roomId=${roomId}`);
 
     socket.onopen = () => {
