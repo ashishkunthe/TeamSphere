@@ -42,6 +42,8 @@ export function Room() {
     getRoomDetails();
   }, []);
 
+  // the websocket connection is here
+
   useEffect(() => {
     console.log("websocket url", websocketUrl);
 
