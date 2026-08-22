@@ -19,24 +19,42 @@ export function Dashboard() {
     "myRooms"
   );
 
-  useEffect(() => {
-    async function getRooms() {
-      try {
-        setLoading(true);
+  async function getRooms() {
+    try {
+      setLoading(true);
 
-        const endpoint =
-          activeTab === "myRooms" ? "/room/get-my-rooms" : "/room/joined-rooms";
+      const endpoint =
+        activeTab === "myRooms" ? "/room/get-my-rooms" : "/room/joined-rooms";
 
-        const response = await axios.get(`${backendUrl}${endpoint}`);
+      const response = await axios.get(`${backendUrl}${endpoint}`);
 
-        setRooms(response.data.rooms);
-      } catch (error: any) {
-        toast.error(error?.response?.data?.message || "Something went wrong");
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
+      setRooms(response.data.rooms);
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || "Something went wrong");
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
+  }
+
+  useEffect(() => {
+    // async function getRooms() {
+    //   try {
+    //     setLoading(true);
+
+    //     const endpoint =
+    //       activeTab === "myRooms" ? "/room/get-my-rooms" : "/room/joined-rooms";
+
+    //     const response = await axios.get(`${backendUrl}${endpoint}`);
+
+    //     setRooms(response.data.rooms);
+    //   } catch (error: any) {
+    //     toast.error(error?.response?.data?.message || "Something went wrong");
+    //     console.log(error);
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // }
 
     getRooms();
   }, [activeTab]);
@@ -60,6 +78,7 @@ export function Dashboard() {
             onSuccess={() => {
               setIsOpen(false);
             }}
+            refreshRooms={getRooms}
           />
         )}
 

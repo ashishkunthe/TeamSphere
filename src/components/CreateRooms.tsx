@@ -6,9 +6,14 @@ import { backendUrl } from "../backendBaseUrl";
 interface CreateRoomsProps {
   onClose: () => void;
   onSuccess: () => void;
+  refreshRooms: () => void;
 }
 
-export function CreateRooms({ onClose, onSuccess }: CreateRoomsProps) {
+export function CreateRooms({
+  onClose,
+  onSuccess,
+  refreshRooms,
+}: CreateRoomsProps) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
@@ -34,6 +39,7 @@ export function CreateRooms({ onClose, onSuccess }: CreateRoomsProps) {
       setDescription("");
       setLoading(false);
       onSuccess();
+      await refreshRooms();
     } catch (error: any) {
       toast.error(error?.response?.data?.message || "Something went wrong");
     }
